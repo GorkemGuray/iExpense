@@ -12,6 +12,7 @@ struct ExpenseItem: Identifiable, Codable {
     let name: String
     let type: String
     let amount: Double
+    let currency: String
 }
 
 @Observable
@@ -41,30 +42,28 @@ class Expenses {
 
 struct ContentView: View {
     
-    @State private var expenses = Expenses()
+    @State private var personalExpenses = Expenses()
+    @State private var businessExpenses = Expenses()
     @State private var showingAddExpense = false
     
-    func removeItems(at offsets: IndexSet) {
-        expenses.items.remove(atOffsets: offsets)
-    }
+
     
     var body: some View {
         
         NavigationStack {
             List {
-                ForEach(expenses.items) {item in
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text(item.name)
-                                .font(.headline)
-                            Text(item.type)
-                        }//VStack
-                        
-                        Spacer()
-                        Text(item.amount, format: .currency(code: "USD"))
-                    }//HStack
-                }//ForEach
-                .onDelete(perform: removeItems)
+                if businessExpenses.items.isEmpty == false {
+                    Section("Business") {
+                        SectionView(expenses: businessExpenses)
+                    }//Section-1
+                }
+                
+                if personalExpenses.items.isEmpty == false {
+                    Section("Personal") {
+                        SectionView(expenses: personalExpenses)
+                    }//Section-2
+                }
+                
             }//List
             .navigationTitle("iExpense")
             .toolbar {
@@ -73,7 +72,7 @@ struct ContentView: View {
                 }//Button
             }//toolbar
             .sheet(isPresented: $showingAddExpense) {
-                AddView(expenses: expenses)
+                AddView(businessExpenses: businessExpenses, personalExpenses: personalExpenses)
             }
             
         }//NavigationStack
