@@ -44,7 +44,7 @@ struct ContentView: View {
     
     @State private var personalExpenses = Expenses()
     @State private var businessExpenses = Expenses()
-    @State private var showingAddExpense = false
+    //@State private var showingAddExpense = false
     
 
     
@@ -63,17 +63,30 @@ struct ContentView: View {
                         SectionView(expenses: personalExpenses)
                     }//Section-2
                 }
-                
             }//List
             .navigationTitle("iExpense")
+            
+            
+            
             .toolbar {
-                Button("Add Expense", systemImage: "plus") {
-                    showingAddExpense = true
-                }//Button
+                ToolbarItem(placement: .primaryAction) {
+                    NavigationLink(destination: AddView(businessExpenses: businessExpenses, personalExpenses: personalExpenses)) {
+                        Image(systemName: "plus")
+                    }
+                    
+                }
+                
+            //    Button("Add Expense", systemImage: "plus") {
+            //        showingAddExpense = true
+            //    }//Button
+                
             }//toolbar
-            .sheet(isPresented: $showingAddExpense) {
-                AddView(businessExpenses: businessExpenses, personalExpenses: personalExpenses)
-            }
+            
+            
+            
+            //.sheet(isPresented: $showingAddExpense) {
+            //    AddView(businessExpenses: businessExpenses, personalExpenses: personalExpenses)
+            //}
             
         }//NavigationStack
 
